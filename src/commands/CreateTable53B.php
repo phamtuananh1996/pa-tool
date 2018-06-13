@@ -54,7 +54,7 @@ class CreateTable53B extends Command
         $this->table($headers, $info);
 
         if ($this->confirm('Do you want init data table ' . $table . ' ?')) {
-            $path = "public\\exels\\t53b.csv";
+            $path = "public//exels//t53b.csv";
             $data = Excel::load($path)->get();
             $bar = $this->output->createProgressBar(count($data));
             $this->line('init data ...');
