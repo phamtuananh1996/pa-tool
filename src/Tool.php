@@ -80,7 +80,7 @@ class Tool
             'D151' => '',
             'D152' => '',
         ];
-        $result = DB::table(config('tool.T53B.TABLE'))->select('*')->where('tem', $tem)->get();
+        $result = DB::table(config('tool.T53B.TABLE'))->select('*')->where(config('tool.T53B.TEMPERATURE'), $tem)->get();
         $d15 = $result->where(config('tool.T53B.DTT'), $dtt)->first();
         if ($d15) {
             $data['D15'] = $d15;
@@ -98,9 +98,9 @@ class Tool
             'VCF1' => '',
             'VCF2' => '',
         ];
-        $result = DB::table(config('tool.T54B.TABLE'))->select('*')->where('tem', $tem)->get();
+        $result = DB::table(config('tool.T54B.TABLE'))->select('*')->where(config('tool.T54B.TEMPERATURE'), $tem)->get();
         $vcf = $result->where(config('tool.T54B.D15'), $d15)->first();
-        if (count($vcf)) {
+        if ($vcf) {
             $data['VCF'] = $vcf;
         } else {
             $data['VCF2'] = $result->where(config('tool.T54B.D15'), '>', $d15)->first();
@@ -118,7 +118,7 @@ class Tool
         ];
         $result = DB::table(config('tool.T56B.TABLE'))->select('*')->get();
         $wcf = $result->where(config('tool.T56B.D15'), $d15)->first();
-        if (count($wcf)) {
+        if ($wcf) {
             $data['WCF'] = $wcf->wcf;
         } else {
             $data['WCF2'] = $result->where(config('tool.T56B.D15'), '>', $d15)->first();
