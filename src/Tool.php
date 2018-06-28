@@ -198,10 +198,11 @@ class Tool
         }
     }
 
-    public function convert($dtt, $tem, $gal)
+    public function convert($dtt, $tem, $gal, $unit_volumn, $exchange_rate, $price, $unit_price, $vat)
     {
         $data = [];
-        $lit = $this->gallonToLitre($gal);
+
+        $lit = strtolower($unit_volumn) == "gallon" ? $this->gallonToLitre($gal) : $gal;
         $tem = $this->roundTemperature($tem);
 
         $d15 = $this->calculateD15($dtt, $tem);
@@ -218,12 +219,19 @@ class Tool
         $kg = $L15 * $wcf;
         $kg = $this->roundKg($kg);
 
+        $subAmount = strtolower($unit_price) == "vnd/gallon" ? $kg * round($price, 4) : $kg * round($price, 4) * round($exchange_rate, 4);
+        $vat = ($subAmount * round($vat, 4)) / 100;
+        $amount = $subAmount + $vat;
+
         $data = [
             'D15' => $d15,
             'VCF' => $vcf,
             'WCF' => $wcf,
             'LIT' => $lit,
-            'KG' => $kg
+            'KG' => $kg,
+            'sub_amount' => $subAmount,
+            'vat' => $vat,
+            'amount' => $amount
         ];
 
         return $data;
