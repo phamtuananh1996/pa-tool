@@ -14,6 +14,7 @@ class Tool
      */
     public function roundTemperature($tem)
     {
+        $tem = round($tem,2);
         $floor = floor($tem);
         $decimal = $tem - $floor;
         if (0.01 <= $decimal && $decimal <= 0.12) {
@@ -229,9 +230,9 @@ class Tool
             'WCF' => $wcf,
             'LIT' => $lit,
             'KG' => $kg,
-            'sub_amount' => $subAmount,
-            'vat' => $vat,
-            'amount' => $amount
+            'sub_amount' => number_format(round($subAmount)),
+            'vat' => number_format(round($vat)),
+            'amount' => number_format(round($amount))
         ];
 
         return $data;
