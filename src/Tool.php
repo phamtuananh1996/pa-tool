@@ -145,7 +145,7 @@ class Tool
 
     public function gallonToLitre($gal)
     {
-        return $gal * 3.7845;
+        return round($gal * 3.78541, 4);
     }
 
     public function calculateD15($dtt, $tem)
@@ -161,7 +161,7 @@ class Tool
             $dtt = $dtt;
             $dtt1 = $result['D151']->$column_dtt;
             $dtt2 = $result['D152']->$column_dtt;
-            return $this->D15($d151, $d152, $dtt, $dtt1, $dtt2);
+            return $this->calculateD15($this->D15($d151, $d152, $dtt, $dtt1, $dtt2));
         }
     }
 
@@ -178,7 +178,7 @@ class Tool
             $d15 = $d15;
             $d151 = $result['VCF1']->$column_d15;
             $d152 = $result['VCF2']->$column_d15;
-            return $this->VCF($vcf1, $vcf2, $d15, $d151, $d152);
+            return $this->roundVCF($this->VCF($vcf1, $vcf2, $d15, $d151, $d152));
         }
     }
 
@@ -195,7 +195,7 @@ class Tool
             $d15 = $d15;
             $d151 = $result['WCF1']->$column_d15;
             $d152 = $result['WCF2']->$column_d15;
-            return $this->WCF($wcf1, $wcf2, $d15, $d151, $d152);
+            return $this->calculateWCF($this->WCF($wcf1, $wcf2, $d15, $d151, $d152));
         }
     }
 
@@ -210,9 +210,9 @@ class Tool
         $vcf = $this->calculateVCF($d15, $tem);
         $wcf = $this->calculateWCF($d15);
 
-        $vcf = $this->roundVCF($vcf);
-        $wcf = $this->roundWCF($wcf);
-        $lit = $this->roundLit($lit);
+        // $vcf = $this->roundVCF($vcf);
+        // $wcf = $this->roundWCF($wcf);
+        // $lit = $this->roundLit($lit);
 
         $L15 = $lit * $vcf;
         $L15 = $this->roundL15($L15);
