@@ -1,8 +1,6 @@
 <?php
 namespace GFL\Tool;
-
 use DB;
-
 class Tool
 {
     /**
@@ -34,7 +32,6 @@ class Tool
         }
         return $floor;
     }
-
     /**
      * round VCF
      *
@@ -46,7 +43,6 @@ class Tool
     {
         return round($vcf, 4);
     }
-
     /**
      * round WCF
      *
@@ -58,22 +54,18 @@ class Tool
     {
         return round($wcf, 4);
     }
-
     public function roundL15($l15)
     {
         return round($l15, 4);
     }
-
     public function roundLit($lit)
     {
         return round($lit, 4);
     }
-
     public function roundKg($kg)
     {
         return round($kg, 4);
     }
-
     public function checkD15($dtt, $tem)
     {
         $data = [
@@ -91,7 +83,6 @@ class Tool
         }
         return $data;
     }
-
     public function checkVCF($d15, $tem)
     {
         $data = [
@@ -109,7 +100,6 @@ class Tool
         }
         return $data;
     }
-
     public function checkWCF($d15)
     {
         $data = [
@@ -127,27 +117,22 @@ class Tool
         }
         return $data;
     }
-
     public function D15($d151, $d152, $dtt, $dtt1, $dtt2)
     {
         return $d151 + (($d152 - $d151) / ($dtt2 - $dtt1) * ($dtt - $dtt1));
     }
-
     public function VCF($vcf1, $vcf2, $d15, $d151, $d152)
     {
         return $vcf1 + (($vcf2 - $vcf1) / ($d152 - $d151) * ($d15 - $d151));
     }
-
     public function WCF($wcf1, $wcf2, $d15, $d151, $d152)
     {
         return $wcf1 + (($wcf2 - $wcf1) / ($d152 - $d151) * ($d15 - $d151));
     }
-
     public function gallonToLitre($gal)
     {
         return round($gal * 3.78541, 4);
     }
-
     public function calculateD15($dtt, $tem)
     {
         $column_d15 = config('tool.T53B.D15');
@@ -164,7 +149,6 @@ class Tool
             return $this->D15($d151, $d152, $dtt, $dtt1, $dtt2);
         }
     }
-
     public function calculateVCF($d15, $tem)
     {
         $column_vcf = config('tool.T54B.VCF');
@@ -181,7 +165,6 @@ class Tool
             return $this->roundVCF($this->VCF($vcf1, $vcf2, $d15, $d151, $d152));
         }
     }
-
     public function calculateWCF($d15)
     {
         $column_wcf = config('tool.T56B.WCF');
@@ -195,35 +178,27 @@ class Tool
             $d15 = $d15;
             $d151 = $result['WCF1']->$column_d15;
             $d152 = $result['WCF2']->$column_d15;
-            return $this->calculateWCF($this->WCF($wcf1, $wcf2, $d15, $d151, $d152));
+            return $this->roundWCF($this->WCF($wcf1, $wcf2, $d15, $d151, $d152));
         }
     }
-
     public function convert($dtt, $tem, $gal, $unit_volumn, $exchange_rate, $price, $unit_price, $vat)
     {
         $data = [];
-
         $lit = strtolower($unit_volumn) == "gallon" ? $this->gallonToLitre($gal) : $gal;
         $tem = $this->roundTemperature($tem);
-
         $d15 = $this->calculateD15($dtt, $tem);
         $vcf = $this->calculateVCF($d15, $tem);
         $wcf = $this->calculateWCF($d15);
-
         // $vcf = $this->roundVCF($vcf);
         // $wcf = $this->roundWCF($wcf);
         // $lit = $this->roundLit($lit);
-
         $L15 = $lit * $vcf;
         $L15 = $this->roundL15($L15);
-
         $kg = $L15 * $wcf;
         $kg = $this->roundKg($kg);
-
         $subAmount = strtolower($unit_price) == "vnd/gallon" ? $kg * round($price, 4) : $kg * round($price, 4) * round($exchange_rate, 4);
         $vat = ($subAmount * round($vat, 4)) / 100;
         $amount = $subAmount + $vat;
-
         $data = [
             'D15' => $d15,
             'VCF' => $vcf,
@@ -234,7 +209,6 @@ class Tool
             'vat' => round($vat),
             'amount' => round($amount)
         ];
-
         return $data;
     }
 }
