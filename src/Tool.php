@@ -161,7 +161,7 @@ class Tool
             $dtt = $dtt;
             $dtt1 = $result['D151']->$column_dtt;
             $dtt2 = $result['D152']->$column_dtt;
-            return $this->calculateD15($this->D15($d151, $d152, $dtt, $dtt1, $dtt2));
+            return $this->D15($d151, $d152, $dtt, $dtt1, $dtt2);
         }
     }
 
