@@ -230,9 +230,9 @@ class Tool
             'WCF' => $wcf,
             'LIT' => $lit,
             'KG' => $kg,
-            'sub_amount' => number_format(round($subAmount)),
-            'vat' => number_format(round($vat)),
-            'amount' => number_format(round($amount))
+            'sub_amount' => round($subAmount),
+            'vat' => round($vat),
+            'amount' => round($amount)
         ];
 
         return $data;
