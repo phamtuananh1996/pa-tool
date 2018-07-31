@@ -211,4 +211,26 @@ class Tool
         ];
         return $data;
     }
+
+    public function simpleConvert($dtt, $tem, $gal, $unit_volumn)
+    {
+        $data = [];
+        $lit = strtolower($unit_volumn) == "gallon" ? $this->gallonToLitre($gal) : $gal;
+        $tem = $this->roundTemperature($tem);
+        $d15 = $this->calculateD15($dtt, $tem);
+        $vcf = $this->calculateVCF($d15, $tem);
+        $wcf = $this->calculateWCF($d15);
+        $L15 = $lit * $vcf;
+        $L15 = $this->roundL15($L15);
+        $kg = $L15 * $wcf;
+        $kg = $this->roundKg($kg);
+        $data = [
+            'D15' => $d15,
+            'VCF' => $vcf,
+            'WCF' => $wcf,
+            'LIT' => $lit,
+            'KG' => $kg
+        ];
+        return $data;
+    }
 }
