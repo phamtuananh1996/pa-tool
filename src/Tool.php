@@ -56,15 +56,15 @@ class Tool
     }
     public function roundL15($l15)
     {
-        return round($l15, 4);
+        return round($l15);
     }
     public function roundLit($lit)
     {
-        return round($lit, 4);
+        return round($lit);
     }
     public function roundKg($kg)
     {
-        return round($kg, 4);
+        return round($kg);
     }
     public function checkD15($dtt, $tem)
     {
@@ -110,7 +110,7 @@ class Tool
         $result = DB::table(config('tool.T56B.TABLE'))->select('*')->get();
         $wcf = $result->where(config('tool.T56B.D15'), $d15)->first();
         if ($wcf) {
-            $data['WCF'] = $wcf->wcf;
+            $data['WCF'] = $wcf;
         } else {
             $data['WCF2'] = $result->where(config('tool.T56B.D15'), '>', $d15)->first();
             $data['WCF1'] = $result->where(config('tool.T56B.D15'), '<', $d15)->sortByDesc(config('tool.T54B.D15'))->first();
@@ -131,7 +131,7 @@ class Tool
     }
     public function gallonToLitre($gal)
     {
-        return round($gal * 3.78541, 4);
+        return round($gal * 3.78541);
     }
     public function calculateD15($dtt, $tem)
     {
@@ -186,20 +186,21 @@ class Tool
         $data = [];
         $lit = strtolower($unit_volumn) == "gallon" ? $this->gallonToLitre($gal) : $gal;
         $tem = $this->roundTemperature($tem);
-        $d15 = $this->calculateD15($dtt, $tem);
+        $d15 = round($this->calculateD15($dtt, $tem),4);
         $vcf = $this->calculateVCF($d15, $tem);
         $wcf = $this->calculateWCF($d15);
-        // $vcf = $this->roundVCF($vcf);
-        // $wcf = $this->roundWCF($wcf);
-        // $lit = $this->roundLit($lit);
+        $vcf = $this->roundVCF($vcf);
+        $wcf = $this->roundWCF($wcf);
+        $lit = $this->roundLit($lit);
         $L15 = $lit * $vcf;
         $L15 = $this->roundL15($L15);
-        $kg = $L15 * $wcf;
+        $kg = round($L15 * $wcf);
         $kg = $this->roundKg($kg);
         $subAmount = strtolower($unit_price) == "vnd/gallon" ? $kg * round($price, 4) : $kg * round($price, 4) * round($exchange_rate, 4);
         $vat = ($subAmount * round($vat, 4)) / 100;
         $amount = $subAmount + $vat;
         $data = [
+            'L15' => $L15,
             'D15' => $d15,
             'VCF' => $vcf,
             'WCF' => $wcf,
@@ -217,14 +218,18 @@ class Tool
         $data = [];
         $lit = strtolower($unit_volumn) == "gallon" ? $this->gallonToLitre($gal) : $gal;
         $tem = $this->roundTemperature($tem);
-        $d15 = $this->calculateD15($dtt, $tem);
+        $d15 = round($this->calculateD15($dtt, $tem),4);
         $vcf = $this->calculateVCF($d15, $tem);
         $wcf = $this->calculateWCF($d15);
+        $vcf = $this->roundVCF($vcf);
+        $wcf = $this->roundWCF($wcf);
+        $lit = $this->roundLit($lit);
         $L15 = $lit * $vcf;
         $L15 = $this->roundL15($L15);
-        $kg = $L15 * $wcf;
+        $kg = round($L15 * $wcf);
         $kg = $this->roundKg($kg);
         $data = [
+            'L15' => $L15,
             'D15' => $d15,
             'VCF' => $vcf,
             'WCF' => $wcf,
