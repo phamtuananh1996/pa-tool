@@ -14,20 +14,20 @@ class Tool
     {
         $tem = round($tem,2);
         $floor = floor($tem);
-        $decimal = $tem - $floor;
+        $decimal = round($tem - $floor, 2);
         if (0.01 <= $decimal && $decimal <= 0.12) {
             return $floor;
         }
-        if (0.13 <= $decimal && $decimal <= 0.37) {
+        if (0.12 < $decimal && $decimal <= 0.37) {
             return $floor + 0.25;
         }
-        if (0.38 <= $decimal && $decimal <= 0.62) {
+        if (0.37 < $decimal && $decimal <= 0.62) {
             return $floor + 0.5;
         }
-        if (0.63 <= $decimal && $decimal <= 0.87) {
+        if (0.62 < $decimal && $decimal <= 0.87) {
             return $floor + 0.75;
         }
-        if (0.88 <= $decimal && $decimal <= 0.99) {
+        if (0.87 < $decimal && $decimal <= 0.99) {
             return $floor + 1;
         }
         return $floor;
@@ -200,6 +200,7 @@ class Tool
         $vat = ($subAmount * round($vat, 4)) / 100;
         $amount = $subAmount + $vat;
         $data = [
+            'tem' => $tem,
             'L15' => $L15,
             'D15' => $d15,
             'VCF' => $vcf,
